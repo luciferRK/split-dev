@@ -1,0 +1,9 @@
+@import "../../../assets/scss/theme";
+
+.custom-icon {
+	@include theme() {
+		path {
+			fill: getColor($primary);
+		}
+	}
+}

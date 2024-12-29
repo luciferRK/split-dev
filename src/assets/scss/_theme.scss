@@ -1,0 +1,59 @@
+@use "./_colors.scss" as color;
+
+$themes: (
+	light: (
+		background: color.$light-background,
+		primary: color.$black,
+		secondary: color.$grey,
+		ternary: color.$blueish,
+		field: color.$secondary-text,
+		success: color.$success,
+		failure: color.$failure,
+		black: color.$black,
+		white: color.$white,
+	),
+	dark: (
+		background: color.$black,
+		primary: color.$white,
+		secondary: color.$blackish-grey,
+		ternary: color.$dark-blueish,
+		field: color.$secondary-text,
+		success: color.$success,
+		failure: color.$failure,
+		black: color.$black,
+		white: color.$white,
+	),
+);
+
+@mixin theme() {
+	@each $name, $map in $themes {
+		[data-theme="#{$name}-theme"] & {
+			$theme-map: () !global;
+			@each $key, $submap in $map {
+				$value: map-get(map-get($themes, $name), "#{$key}");
+				$theme-map: map-merge(
+					$theme-map,
+					(
+						$key: $value,
+					)
+				) !global;
+			}
+			@content;
+			$theme-map: null !global;
+		}
+	}
+}
+
+@function getColor($key) {
+	@return map-get($theme-map, $key);
+}
+
+$background: "background";
+$primary: "primary";
+$secondary: "secondary";
+$ternary: "ternary";
+$field: "field";
+$success: "success";
+$failure: "failure";
+$black: "black";
+$white: "white";

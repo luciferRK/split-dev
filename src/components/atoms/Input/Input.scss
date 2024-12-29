@@ -1,0 +1,18 @@
+@import "../../../assets/scss/theme";
+
+input.input-field {
+	all: unset;
+	width: 8rem;
+	border: none;
+	outline: none;
+	padding: 0.5rem 0.4rem;
+	background-color: transparent;
+	font-size: 1.3em;
+	@include theme() {
+		color: getColor($primary);
+		border-bottom: 1px solid getColor($primary);
+	}
+	&:disabled {
+		border-bottom: none;
+	}
+}

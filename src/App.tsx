@@ -1,11 +1,18 @@
-import { useState } from 'react'
-import './App.scss'
+import "./App.scss";
+import { BrowserRouter } from "react-router-dom";
+import Router from "./components/atoms/Router";
+import AllContextProvider from "./context/AllContextProvider";
 
 function App() {
-  return (
-    <>
-    </>
-  )
+	return (
+		<AllContextProvider>
+			<div className='split-app'>
+				<BrowserRouter>
+					<Router />
+				</BrowserRouter>
+			</div>
+		</AllContextProvider>
+	);
 }
 
-export default App
+export default App;
