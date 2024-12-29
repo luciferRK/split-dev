@@ -4,6 +4,7 @@ import classNames from "../../utils";
 import { Back, PlusMinus } from "../Icons";
 import { useNavigate } from "react-router-dom";
 import { ShowIfElse } from "../ShowIf";
+import useSplitActions from "../../../context/actions/SplitActions";
 
 interface FooterProps {
 	isAddNewPage?: boolean;
@@ -13,14 +14,15 @@ const Footer: React.FC<FooterProps> = (props) => {
 	const { isAddNewPage = false } = props;
 	const navigate = useNavigate();
 
-	const totalAmount = 4587.79;
+	const { splitState } = useSplitActions();
+	const { totalAmountOwed } = splitState;
 
 	return (
 		<footer className='footer'>
 			<div className='total'>
-				Total Money:{" "}
-				<span className={classNames("amount", { less: totalAmount < 0 })}>
-					{totalAmount}
+				Total Money:&nbsp;
+				<span className={classNames("amount", { less: totalAmountOwed < 0 })}>
+					{totalAmountOwed}
 				</span>
 			</div>
 			<div

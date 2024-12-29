@@ -2,7 +2,7 @@ import { FirebaseApp } from "firebase/app";
 import {
 	addDoc,
 	collection,
-	doc,
+	// doc,
 	getDocs,
 	getFirestore,
 	or,
@@ -13,11 +13,12 @@ import { SplitDataType } from "../../components/utils/constants";
 import { COLLECTIONS } from ".";
 import useSplitActions from "../../context/actions/SplitActions";
 import useUserActions from "../../context/actions/UserActions";
+import { handleError } from "../../components/utils";
 
 const useSplitStore = (app: FirebaseApp) => {
 	const db = getFirestore(app);
 
-	const {} = useSplitActions();
+	const { setAllSplits, splitState, calculatePeopleSplit } = useSplitActions();
 	const { userState } = useUserActions();
 
 	const getCol = (name: string) => collection(db, name);
@@ -25,21 +26,45 @@ const useSplitStore = (app: FirebaseApp) => {
 	// const getDocField = (collection: string, field: string) =>
 	// 	doc(getCol(collection), field);
 
-	const getAllSplits = () => {
-		getDocs(
-			query(
-				getCol(COLLECTIONS.SPLITS),
-				or(
-					where("paidByUsers", "array-contains", userState.user.uid),
-					where("splitsUsers", "array-contains", userState.user.uid)
+	const getAllSplits = (refetch = false, doPeopleSplit: boolean = false) => {
+		if (refetch || splitState.allSplits.loading) {
+			getDocs(
+				query(
+					getCol(COLLECTIONS.SPLITS),
+					or(
+						where("paidByUsers", "array-contains", userState.user.uid),
+						where("splitsUsers", "array-contains", userState.user.uid)
+					)
 				)
 			)
-		).then((result) => {
-			console.log(result.size);
-			result.forEach((item) => {
-				console.log(item.data(), "getSplits");
-			});
-		});
+				.then((result) => {
+					const allSplits: { [key: string]: any } = {};
+					result.forEach((item) => {
+						const data = item.data();
+						allSplits[item.id] = {
+							id: item.id,
+							amount: data.amount,
+							paidBy: Object.keys(data.paidBy).map((key) => ({
+								uid: key,
+								...data.paidBy[key],
+							})),
+							splits: Object.keys(data.splits).map((key) => ({
+								uid: key,
+								...data.splits[key],
+							})),
+							title: data.title,
+						};
+					});
+					setAllSplits(allSplits);
+					if (doPeopleSplit) {
+						calculatePeopleSplit(allSplits, userState.user.uid);
+					}
+				})
+				.catch((err) => {
+					setAllSplits({});
+					handleError(err);
+				});
+		}
 	};
 
 	const createSplit = (split: SplitDataType) =>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Show } from "../atoms/ShowIf";
-import classNames, { or } from "../utils";
+import classNames, { ifElse, or } from "../utils";
 import Input from "../atoms/Input";
 import Dropdown from "../atoms/Dropdown";
 import { Option } from "../utils/constants";
@@ -52,7 +52,7 @@ const ContentSection: React.FC<ContentSectionProps> = (props) => {
 						key={info.uid}>
 						<Dropdown
 							options={options}
-							value={info.uid}
+							value={ifElse(isAdd, info.uid, info.name)}
 							disabled={!isAdd}
 							optionOnSelect
 							onlyOnValuePropChange

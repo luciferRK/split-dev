@@ -57,7 +57,6 @@ const getFriendsFunction = (
 		const friedsResponse = await getDocs(q);
 		const userIDs: Array<string> = [];
 		friedsResponse.forEach((item) => {
-			console.log("inside item of query of friend request", item, item.data());
 			const uid = item.id.split("_")[0];
 			userIDs.push(uid);
 		});

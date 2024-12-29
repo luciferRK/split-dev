@@ -2,6 +2,7 @@ import React from "react";
 import { SplitContextType, SplitContextStateType } from "./types";
 
 const initialState: SplitContextStateType = {
+	totalAmountOwed: 0,
 	peopleSplit: {
 		loading: true,
 		data: [],
@@ -37,6 +38,11 @@ const SplitContextReducer = (
 					loading: false,
 					data: action.payload,
 				},
+			};
+		case "SET_TOTAL_OWED":
+			return {
+				...state,
+				totalAmountOwed: action.payload,
 			};
 		default:
 			return state;

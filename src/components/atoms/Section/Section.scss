@@ -6,6 +6,10 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	.amount {
+		font-weight: 600;
+		font-family: "Montserrat";
+	}
 	@include theme() {
 		background-color: getColor($secondary);
 		.amount {

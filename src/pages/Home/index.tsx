@@ -1,41 +1,44 @@
+import React from "react";
 import Footer from "../../components/atoms/Footer";
 import Header from "../../components/atoms/Header";
 import Section from "../../components/atoms/Section";
 import classNames from "../../components/utils";
+import useFirebase from "../../services/Firebase";
 import "./Home.scss";
+import useSplitActions from "../../context/actions/SplitActions";
+import { ShowIfElse } from "../../components/atoms/ShowIf";
 
 const Home = () => {
-	const activeSplits = [
-		{
-			name: "John Doe 1",
-			amount: 1287.79,
-		},
-		{
-			name: "John Doe 2",
-			amount: -200,
-		},
-		{
-			name: "John Doe 3",
-			amount: 3500,
-		},
-	];
+	const { getAllSplits } = useFirebase();
+	const { splitState } = useSplitActions();
+	const { peopleSplit } = splitState;
+
+	React.useEffect(() => {
+		getAllSplits(true, true);
+	}, []);
 
 	return (
 		<>
 			<Header />
 			<div className='main-content home'>
 				<div className='heading'>
-					People with Active Splits ({activeSplits.length})
+					People with Active Splits ({peopleSplit.data.length})
 				</div>
 				<div className='splits'>
-					{activeSplits.map((info) => (
-						<Section>
-							<div>{info.name}</div>
-							<div className={classNames("amount", { less: info.amount < 0 })}>
-								{Math.abs(info.amount)}
-							</div>
-						</Section>
-					))}
+					<ShowIfElse if={peopleSplit.loading}>
+						<Section>Loading !!!</Section>
+						<>
+							{peopleSplit.data.map((info) => (
+								<Section key={info.name}>
+									<div>{info.name}</div>
+									<div
+										className={classNames("amount", { less: info.amount > 0 })}>
+										{Math.abs(info.amount)}
+									</div>
+								</Section>
+							))}
+						</>
+					</ShowIfElse>
 				</div>
 			</div>
 			<Footer />

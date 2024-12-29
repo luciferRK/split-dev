@@ -12,6 +12,12 @@
 		text-align: right;
 		margin: 0.7rem 0 0;
 	}
+	.owing-message {
+		padding: 0.5rem 0.4rem 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
 	.amount-type {
 		width: 100%;
 		display: flex;
@@ -42,9 +48,11 @@
 			width: 100%;
 			font-weight: 600;
 			display: flex;
+			padding-left: 0.4rem;
 			justify-content: space-between;
 		}
 		.people {
+			margin-top: 1rem;
 			width: 100%;
 			display: flex;
 			flex-direction: column;
@@ -88,5 +96,11 @@
 .error-msg {
 	@include theme() {
 		color: getColor($failure);
+	}
+}
+
+.success-msg {
+	@include theme() {
+		color: getColor($success);
 	}
 }

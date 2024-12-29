@@ -22,10 +22,7 @@ const createContainer = () => {
 
 const createToaster = (type: ToastType, options: ToastOptions) => {
 	const container = createContainer();
-	console.log("container", container);
 	const root = createRoot(container);
-
-	console.log("root", root);
 
 	const {
 		msg = "",
@@ -38,7 +35,6 @@ const createToaster = (type: ToastType, options: ToastOptions) => {
 	root.render(
 		<Toaster
 			destroy={() => {
-				console.log("destory called");
 				root.unmount();
 				container.remove();
 				const wrapper = document.querySelector("#toaster-wrapper");
@@ -58,7 +54,6 @@ const createToaster = (type: ToastType, options: ToastOptions) => {
 };
 
 export const toastSuccess: ToasterFunc = (options) => {
-	console.log("called toastSuccess");
 	createToaster("success", options);
 };
 

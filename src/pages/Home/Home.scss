@@ -1,6 +1,7 @@
 @import "../../assets/scss/theme";
 
-.home {
+.home,
+.all-splits {
 	.heading {
 		font-weight: 600;
 		@include theme() {

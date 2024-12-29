@@ -11,6 +11,9 @@ footer.footer {
 	}
 	.total {
 		font-size: 1.2rem;
+		.amount {
+			font-weight: 600;
+		}
 		@include theme() {
 			.amount {
 				color: getColor($success);

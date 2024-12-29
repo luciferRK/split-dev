@@ -3,17 +3,18 @@ import "./SplitPage.scss";
 import Input from "../atoms/Input";
 import Dropdown from "../atoms/Dropdown";
 import ReverseRender from "../atoms/ReverseRender";
-import { Show } from "../atoms/ShowIf";
+import { Show, ShowIfElse } from "../atoms/ShowIf";
 import ContentSection from "./ContentSection";
 import useUserActions from "../../context/actions/UserActions";
-import { getProperty, ifElse, isEmpty, or } from "../utils";
+import { getProperty, ifElse, isEmpty, isNullOrUndefined, or } from "../utils";
 import { SplitDataType } from "../utils/constants";
 import useFirebase from "../../services/Firebase";
 import toast from "../atoms/Toaster";
+import useSplitActions from "../../context/actions/SplitActions";
 
 interface SplitPageProps {
 	isAddNew?: boolean;
-	id?: string;
+	id?: string | null;
 }
 
 const SPLIT_TYPES = [
@@ -50,13 +51,29 @@ const SplitPage: React.FC<SplitPageProps> = (props) => {
 	const { createSplit } = useFirebase();
 
 	const { userState } = useUserActions();
+	const { splitState, calculatePeopleSplit } = useSplitActions();
+	const { allSplits } = splitState;
 	const { friends } = userState;
 
 	const [errors, setErrors] = React.useState<Array<string>>([]);
+	const [calculations, setCalculations] = React.useState<any>({});
 	const [splitData, setSplitData] =
 		React.useState<SplitDataType>(EMPTY_SPLI_DATA);
 
-	React.useEffect(() => {}, [id]);
+	React.useEffect(() => {
+		if (!isNullOrUndefined(id)) {
+			setSplitData(allSplits.data[id as string]);
+			setCalculations(
+				calculatePeopleSplit(
+					{
+						[id as string]: allSplits.data[id as string],
+					},
+					userState.user.uid,
+					true
+				)
+			);
+		}
+	}, [id]);
 
 	const handleSplitAmountChangeForEqual = (type?: string) => {
 		if (or(type && type === "EQUAL", splitData.type === "EQUAL")) {
@@ -126,6 +143,7 @@ const SplitPage: React.FC<SplitPageProps> = (props) => {
 				<Input
 					placeholder='Split Title'
 					value={splitData.title}
+					disabled={!isAddNew}
 					onChange={(value) => {
 						setSplitData((prev) => ({
 							...prev,
@@ -137,11 +155,14 @@ const SplitPage: React.FC<SplitPageProps> = (props) => {
 					<div className='error-msg'>Title cannot be empty</div>
 				</Show>
 			</div>
-			<div className='subHeading-for-amount-type'>How to Split</div>
+			<Show if={isAddNew}>
+				<div className='subHeading-for-amount-type'>How to Split</div>
+			</Show>
 			<div className='amount-type'>
 				<Input
 					value={splitData.amount}
 					type='number'
+					disabled={!isAddNew}
 					onChange={(value) => {
 						setSplitData((prev) => ({
 							...prev,
@@ -153,27 +174,44 @@ const SplitPage: React.FC<SplitPageProps> = (props) => {
 					}}
 					placeholder='Split Amount'
 				/>
-				<Dropdown
-					className='split-type'
-					iconBefore
-					options={SPLIT_TYPES.map((type: string) => ({
-						label: type,
-						value: type.toUpperCase(),
-					}))}
-					showSearch={false}
-					value={splitData.type}
-					onSelect={(value: any) => {
-						setSplitData((prev) => ({
-							...prev,
-							type: value,
-						}));
-						handleSplitAmountChangeForEqual(value);
-					}}
-				/>
+				<Show if={isAddNew}>
+					<Dropdown
+						className='split-type'
+						iconBefore
+						options={SPLIT_TYPES.map((type: string) => ({
+							label: type,
+							value: type.toUpperCase(),
+						}))}
+						showSearch={false}
+						value={splitData.type}
+						onSelect={(value: any) => {
+							setSplitData((prev) => ({
+								...prev,
+								type: value,
+							}));
+							handleSplitAmountChangeForEqual(value);
+						}}
+					/>
+				</Show>
 			</div>
-
 			<Show if={errors.includes("amount")}>
 				<div className='amount-type error-msg'>Amount cannot be empty</div>
+			</Show>
+			<Show if={!isAddNew}>
+				<div className='owing-message'>
+					{Object.values(calculations).map((info: any) => (
+						<div className='message'>
+							{info.name}&nbsp;
+							{ifElse(
+								info.amount > 0,
+								<span className='success-msg'>is owed</span>,
+								<span className='error-msg'>owes</span>
+							)}
+							&nbsp;
+							{Math.abs(info.amount)}
+						</div>
+					))}
+				</div>
 			</Show>
 			<ReverseRender reverse={false}>
 				<ContentSection
@@ -211,7 +249,11 @@ const SplitPage: React.FC<SplitPageProps> = (props) => {
 						ifNoDuplicate();
 						setSplitData((prev) => {
 							const prevPaidBy = { ...prev.paidBy[index] };
-							prevPaidBy[field] = value;
+							prevPaidBy[field] = ifElse(
+								field === "amount",
+								Number(value),
+								value
+							);
 							return {
 								...prev,
 								...ifElse(
@@ -267,10 +309,13 @@ const SplitPage: React.FC<SplitPageProps> = (props) => {
 							return;
 						}
 						ifNoDuplicate();
-						console.log("line after ifNoDuplicate");
 						setSplitData((prev) => {
 							const prevSplit = { ...prev.splits[index] };
-							prevSplit[field] = value;
+							prevSplit[field] = ifElse(
+								field === "amount",
+								Number(value),
+								value
+							);
 							return {
 								...prev,
 								...ifElse(

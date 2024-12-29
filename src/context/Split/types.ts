@@ -4,13 +4,14 @@ export interface PeopleSplitType {
 }
 
 export interface SplitContextStateType {
+	totalAmountOwed: number;
 	peopleSplit: {
 		loading: boolean;
 		data: Array<PeopleSplitType>;
 	};
 	allSplits: {
 		loading: boolean;
-		data: Array<any>;
+		data: { [key: string]: any };
 	};
 }
 
