@@ -1,0 +1,90 @@
+@use "../../../assets/scss/colors" as color;
+
+@keyframes slidein {
+	0% {
+		margin-left: 20rem;
+	}
+	70% {
+		margin-left: -0.5rem;
+	}
+	100% {
+		margin-left: 0;
+	}
+}
+
+@keyframes slideout {
+	from {
+		margin-left: 0;
+	}
+	to {
+		margin-left: 20rem;
+	}
+}
+
+#toaster-wrapper {
+	position: fixed;
+	top: 0;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	z-index: 10101010;
+	width: 20rem;
+	min-height: 3rem;
+	padding: 4rem 0 2rem;
+	font-size: 0.875rem;
+	.toaster-container {
+		width: 90%;
+		position: relative;
+		.toaster {
+			animation: slidein 0.7s;
+			transition: margin-left 0.4s ease-out;
+			width: 100%;
+			margin-bottom: 1.3rem;
+			border-radius: 0.75rem;
+			padding: 0.8rem 1rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			color: color.$white;
+			.toast-content {
+				display: flex;
+				max-width: 100%;
+				column-gap: 1rem;
+				row-gap: 0.5rem;
+				flex-wrap: wrap;
+				.toast-title {
+					font-weight: 700;
+					color: color.$white;
+				}
+				.toast-content {
+					color: color.$white;
+				}
+			}
+			.toast-actions {
+				display: flex;
+				align-items: center;
+				min-width: fit-content;
+				cursor: pointer;
+				.divider {
+					text-align: right;
+					padding-right: 0.4rem;
+					border-right: 1px solid color.$white;
+				}
+				.toast-cancel {
+					padding-left: 0.2rem;
+					display: flex;
+					align-items: center;
+				}
+			}
+		}
+		.toast-success {
+			background-color: color.$success;
+		}
+		.toast-error {
+			background-color: color.$failure;
+		}
+		.closing {
+			animation: slideout 0.7s;
+		}
+	}
+}

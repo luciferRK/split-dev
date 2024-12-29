@@ -1,0 +1,73 @@
+@import "../../../assets/scss/theme";
+
+header.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: 0 1rem;
+	height: 4.3rem;
+	& > span {
+		font-size: 2rem;
+	}
+	.menu {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: flex-end;
+		height: 1.75rem;
+		width: 2rem;
+		.line {
+			height: 0.1rem;
+			width: 100%;
+			@include theme() {
+				background-color: getColor($primary);
+			}
+			&:nth-child(2) {
+				width: 80%;
+			}
+			&:nth-child(3) {
+				width: 35%;
+			}
+			&:last-child {
+				width: 60%;
+			}
+		}
+	}
+	.expanded-menu {
+		width: 60vw;
+		height: 100vh;
+		position: absolute;
+		z-index: 1010;
+		right: 0;
+		top: 0;
+		padding: 1rem;
+		@include theme() {
+			background-color: getColor($ternary);
+		}
+		.menu-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			.heading {
+				font-weight: 600;
+			}
+		}
+		.menu.open {
+			align-items: flex-start;
+		}
+		.menu-content {
+			margin-top: 1.5rem;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			gap: 0.8rem;
+			a {
+				@include theme() {
+					color: getColor($primary);
+				}
+				text-decoration: none;
+			}
+		}
+	}
+}

@@ -1,0 +1,15 @@
+@import "./assets/scss/theme";
+
+.split-app {
+	width: 100vw;
+	height: 100vh;
+	@include theme() {
+		background-color: getColor($background);
+		color: getColor($primary);
+	}
+	.main-content {
+		position: relative;
+		padding: 1.75rem 1rem;
+		height: calc(100% - 6.8rem);
+	}
+}

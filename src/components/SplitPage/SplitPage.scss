@@ -1,0 +1,92 @@
+@import "../../assets/scss/theme";
+
+.split-page {
+	.split-title {
+		input {
+			font-size: 1rem;
+			width: 60%;
+		}
+	}
+	.subHeading-for-amount-type {
+		width: 100%;
+		text-align: right;
+		margin: 0.7rem 0 0;
+	}
+	.amount-type {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		input {
+			font-size: 2rem;
+			width: 40%;
+			&::placeholder {
+				font-size: 1rem;
+			}
+		}
+		.split-type {
+			width: 8rem;
+			font-size: 1rem;
+			.dropdown-header {
+				padding-left: 0;
+			}
+		}
+	}
+	.content-section {
+		margin-top: 2rem;
+		font-size: 1.1rem;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		.heading {
+			width: 100%;
+			font-weight: 600;
+			display: flex;
+			justify-content: space-between;
+		}
+		.people {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: 0.6rem;
+			.user {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				.dropdown {
+					input.input-field {
+						text-align: left;
+					}
+				}
+				input.input-field {
+					text-align: right;
+				}
+			}
+		}
+		.add-new {
+			cursor: pointer;
+			margin: 0.8rem 0;
+		}
+	}
+	.submit-button {
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
+		button {
+			all: unset;
+			font-size: 1rem;
+			padding: 0.8rem;
+			border-radius: 0.5rem;
+			@include theme() {
+				background-color: getColor($secondary);
+			}
+		}
+	}
+}
+
+.error-msg {
+	@include theme() {
+		color: getColor($failure);
+	}
+}

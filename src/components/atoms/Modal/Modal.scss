@@ -1,0 +1,35 @@
+@use "../../../assets/scss/colors" as color;
+@import "../../../assets/scss/theme";
+
+.modal {
+	z-index: 1010;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	.modal-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1010;
+		width: 100%;
+		height: 100vh;
+		@include theme() {
+			background-color: rgba(color.$black, 0.7);
+		}
+	}
+	.modal-content {
+		z-index: 10101010;
+		width: 80%;
+		height: 70vh;
+		padding: 1rem 1rem;
+		border-radius: 0.5rem;
+		@include theme() {
+			background-color: getColor($secondary);
+		}
+	}
+}
