@@ -14,6 +14,15 @@ export interface UserContextStateType {
 		loading: boolean;
 		data: Array<BasicUserType>;
 	};
+	groups: {
+		loading: boolean;
+		data: Array<{
+			id: string;
+			title: string;
+			owner: string;
+			userIDs: Array<string>;
+		}>;
+	};
 	friendRequests: {
 		loading: boolean;
 		data: Array<BasicUserType>;

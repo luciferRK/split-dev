@@ -3,6 +3,7 @@ import { Show, ShowIfElse } from "../ShowIf";
 import "./Dropdown.scss";
 import { ChevronDown, ChevronUp } from "../Icons";
 import classNames, {
+	and,
 	ifElse,
 	isEmpty,
 	isNullOrUndefined,
@@ -23,6 +24,10 @@ interface DropdownProps {
 	disabled?: boolean;
 	loading?: boolean;
 	onlyOnValuePropChange?: boolean;
+	extraOption?: {
+		label: string;
+		onClick: Function;
+	};
 }
 
 const Dropdown: React.FC<DropdownProps> = (props) => {
@@ -37,6 +42,7 @@ const Dropdown: React.FC<DropdownProps> = (props) => {
 		loading = false,
 		optionOnSelect = false,
 		onlyOnValuePropChange = false,
+		extraOption = undefined,
 	} = props;
 	const [isOpen, setIsOpen] = useState(false);
 	const [selected, setSelected] = useState<any>(value);
@@ -168,6 +174,22 @@ const Dropdown: React.FC<DropdownProps> = (props) => {
 										{option.label}
 									</div>
 								))}
+							{and(
+								!isNullOrUndefined(extraOption),
+								<div
+									onMouseDown={(e) => {
+										setMouseDownEvent(e.target);
+									}}
+									className={classNames("dropdown-option", {
+										right: iconBefore,
+									})}
+									onClick={() => {
+										extraOption?.onClick();
+										setIsOpen(false);
+									}}>
+									{extraOption?.label}
+								</div>
+							)}
 						</>
 					</ShowIfElse>
 				</div>

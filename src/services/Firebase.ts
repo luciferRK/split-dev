@@ -26,6 +26,9 @@ const useFirebase = () => {
 		getFriends,
 		resolveFriendRequest,
 		deleteFriend,
+		addGroup,
+		getMyGroups,
+		deleteGroup,
 	} = useFirestore(app);
 
 	const { login, logout } = useFirebaseAuth(app, {
@@ -46,6 +49,9 @@ const useFirebase = () => {
 		deleteFriend,
 		createSplit,
 		getAllSplits,
+		addGroup,
+		getMyGroups,
+		deleteGroup,
 	};
 };
 

@@ -11,17 +11,19 @@ import getUserFunctions from "./Users";
 import useUserActions from "../../context/actions/UserActions";
 import { BasicUserType } from "../../context/User/types";
 import getFriendsFunction from "./Friends";
+import getGroupFunctions from "./Groups";
 
 export const COLLECTIONS = {
 	USERS: "users",
 	FRIENDS: "friends",
 	SPLITS: "splits",
+	GROUPS: "groups",
 };
 
 const useFirestore = (app: FirebaseApp) => {
 	const db = getFirestore(app);
 
-	const { userState, setAllUsers, setFriends, setFriendRequests } =
+	const { userState, setAllUsers, setFriends, setFriendRequests, setGroups } =
 		useUserActions();
 
 	const getCol = (name: string) => collection(db, name);
@@ -54,6 +56,12 @@ const useFirestore = (app: FirebaseApp) => {
 		resolveFriendReq,
 		removeFriend,
 	} = getFriendsFunction(getCol, getDocField);
+
+	const {
+		createGroup,
+		getMyGroups: getGroups,
+		deleteGroup: removeGroup,
+	} = getGroupFunctions(getCol, getDocField);
 
 	const getAllUsers = (refetch: boolean = false) => {
 		if (or(refetch, userState.allUsers.loading)) {
@@ -138,6 +146,52 @@ const useFirestore = (app: FirebaseApp) => {
 			});
 	};
 
+	const addGroup = (
+		info: { title: string; users: Array<string> },
+		onComplete: Function = (_: any) => {}
+	) => {
+		createGroup(
+			{
+				title: info.title,
+				userIDs: info.users,
+			},
+			userState.user.uid
+		)
+			.then(() => {
+				onComplete();
+			})
+			.catch((err) => {
+				onComplete(err);
+			});
+	};
+
+	const getMyGroups = (refetch: boolean = false) => {
+		if (refetch || userState.groups.loading) {
+			getGroups(userState.user.uid)
+				.then((result) => {
+					const data: Array<any> = [];
+					result.forEach((item) => {
+						data.push({ id: item.id, ...item.data() });
+					});
+					setGroups(data);
+				})
+				.catch((err) => {
+					handleError(err);
+					setGroups([]);
+				});
+		}
+	};
+
+	const deleteGroup = (id: string, onComplete: Function = (_: any) => {}) => {
+		removeGroup(id)
+			.then(() => {
+				onComplete();
+			})
+			.catch((err) => {
+				onComplete(err);
+			});
+	};
+
 	return {
 		getUser,
 		createUser,
@@ -147,6 +201,9 @@ const useFirestore = (app: FirebaseApp) => {
 		getFriends,
 		resolveFriendRequest,
 		deleteFriend,
+		addGroup,
+		getMyGroups,
+		deleteGroup,
 	};
 };
 

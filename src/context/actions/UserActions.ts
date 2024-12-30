@@ -44,6 +44,10 @@ const useUserActions = () => {
 		dispatch({ type: "SET_FRIEND_REQUESTS", payload: value });
 	};
 
+	const setGroups = (value: Array<any>) => {
+		dispatch({ type: "SET_GROUPS", payload: value });
+	};
+
 	return {
 		userState,
 		setLoggedIn,
@@ -54,6 +58,7 @@ const useUserActions = () => {
 		setFriends,
 		setAllUsers,
 		setFriendRequests,
+		setGroups,
 	};
 };
 

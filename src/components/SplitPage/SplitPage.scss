@@ -51,6 +51,11 @@
 			padding-left: 0.4rem;
 			justify-content: space-between;
 		}
+		hr {
+			width: 97%;
+			margin-top: 0.8rem;
+			margin-bottom: 0;
+		}
 		.people {
 			margin-top: 1rem;
 			width: 100%;
@@ -102,5 +107,25 @@
 .success-msg {
 	@include theme() {
 		color: getColor($success);
+	}
+}
+
+.select-group-modal {
+	.modal-content {
+		.title {
+			margin: 0.8rem 0;
+			font-size: 1.3rem;
+			font-weight: 600;
+		}
+		.group-list {
+			display: flex;
+			flex-direction: column;
+			gap: 0.8rem;
+			.section {
+				@include theme() {
+					background-color: getColor($background);
+				}
+			}
+		}
 	}
 }

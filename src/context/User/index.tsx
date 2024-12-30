@@ -15,6 +15,7 @@ const initialState: UserContextStateType = {
 		idToken: "",
 	},
 	friends: { loading: true, data: [] },
+	groups: { loading: true, data: [] },
 	allUsers: { loading: true, data: [] },
 	friendRequests: { loading: true, data: [] },
 };
@@ -76,6 +77,14 @@ const userContextReducer = (
 			return {
 				...state,
 				friendRequests: {
+					loading: false,
+					data: action.payload,
+				},
+			};
+		case "SET_GROUPS":
+			return {
+				...state,
+				groups: {
 					loading: false,
 					data: action.payload,
 				},
