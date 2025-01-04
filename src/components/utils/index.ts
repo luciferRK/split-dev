@@ -130,3 +130,21 @@ export const handleError = (error: any) => {
 			console.error("ERR:", error);
 		}
 };
+
+export const sortObject = (obj: any, key: string | undefined = undefined) => {
+	if (key) {
+		return Object.entries(obj)
+			.sort((a: any, b: any) => b[1][key] - a[1][key])
+			.reduce((sortedObj: any, entry: any) => {
+				sortedObj[entry[0]] = entry[1];
+				return sortedObj;
+			}, {});
+	} else {
+		return Object.keys(obj)
+			.sort()
+			.reduce((prev: any, curr) => {
+				prev[curr] = obj[curr];
+				return prev;
+			}, {});
+	}
+};

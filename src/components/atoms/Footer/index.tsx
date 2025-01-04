@@ -22,7 +22,7 @@ const Footer: React.FC<FooterProps> = (props) => {
 			<div className='total'>
 				Total Money:&nbsp;
 				<span className={classNames("amount", { less: totalAmountOwed < 0 })}>
-					{totalAmountOwed}
+					{Math.abs(totalAmountOwed)}
 				</span>
 			</div>
 			<div

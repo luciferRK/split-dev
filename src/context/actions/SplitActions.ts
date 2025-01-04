@@ -1,7 +1,7 @@
 import React from "react";
 import { SplitContext } from "../Split";
 import { PeopleSplitType } from "../Split/types";
-import { getProperty } from "../../components/utils";
+import { getProperty, ifElse, or, sortObject } from "../../components/utils";
 
 const useSplitActions = () => {
 	const { state, dispatch } = React.useContext(SplitContext);
@@ -30,12 +30,29 @@ const useSplitActions = () => {
 				name: string;
 			};
 		} = {};
+		let eachCalculation: {
+			[key: string]: {
+				amount: number;
+				name: string;
+			};
+		} = {};
+		const paymentsToBeDone: { [key: string]: any } = {};
 		splits.forEach((split) => {
+			eachCalculation = {};
 			split.paidBy.forEach((info: any) => {
 				calculations[info.uid] = {
 					amount: Number(
 						Number(
 							getProperty(calculations, [info.uid, "amount"], 0) + info.amount
+						).toFixed(2)
+					),
+					name: info.name,
+				};
+				eachCalculation[info.uid] = {
+					amount: Number(
+						Number(
+							getProperty(eachCalculation, [info.uid, "amount"], 0) +
+								info.amount
 						).toFixed(2)
 					),
 					name: info.name,
@@ -50,14 +67,160 @@ const useSplitActions = () => {
 					),
 					name: info.name,
 				};
+				eachCalculation[info.uid] = {
+					amount: Number(
+						Number(
+							getProperty(eachCalculation, [info.uid, "amount"], 0) -
+								info.amount
+						).toFixed(2)
+					),
+					name: info.name,
+				};
 			});
+			const amountSortedEachCalc = sortObject(eachCalculation, "amount");
+			const sortedIds = Object.keys(amountSortedEachCalc);
+			const idOfPeopleOwed = sortedIds.filter(
+				(key) => eachCalculation[key].amount > 0
+			);
+			let idOfPeopleOwe = sortedIds.filter(
+				(key) => eachCalculation[key].amount < 0
+			);
+			idOfPeopleOwe = idOfPeopleOwe.reverse();
+			let currentIdOfPeopleOwed = 0;
+			let currentIdOfPeopleOwe = 0;
+			const lengthOfPeopleOwed = idOfPeopleOwed.length;
+			const lengthOfPeopleOwe = idOfPeopleOwe.length;
+			while (
+				currentIdOfPeopleOwed < lengthOfPeopleOwed &&
+				currentIdOfPeopleOwe < lengthOfPeopleOwe
+			) {
+				if (
+					getProperty(
+						amountSortedEachCalc,
+						[idOfPeopleOwed[currentIdOfPeopleOwed], "amount"],
+						0
+					) >=
+					Math.abs(
+						getProperty(
+							amountSortedEachCalc,
+							[idOfPeopleOwe[currentIdOfPeopleOwe], "amount"],
+							0
+						)
+					)
+				) {
+					paymentsToBeDone[idOfPeopleOwed[currentIdOfPeopleOwed]] = {
+						...getProperty(
+							paymentsToBeDone,
+							[idOfPeopleOwed[currentIdOfPeopleOwed]],
+							{}
+						),
+						name: getProperty(
+							amountSortedEachCalc,
+							[idOfPeopleOwed[currentIdOfPeopleOwed], "name"],
+							""
+						),
+						[idOfPeopleOwe[currentIdOfPeopleOwe]]: {
+							...getProperty(
+								paymentsToBeDone,
+								[
+									idOfPeopleOwed[currentIdOfPeopleOwed],
+									idOfPeopleOwe[currentIdOfPeopleOwe],
+								],
+								amountSortedEachCalc[idOfPeopleOwe[currentIdOfPeopleOwe]]
+							),
+							amount:
+								getProperty(
+									paymentsToBeDone,
+									[
+										idOfPeopleOwed[currentIdOfPeopleOwed],
+										idOfPeopleOwe[currentIdOfPeopleOwe],
+										"amount",
+									],
+									0
+								) +
+								getProperty(amountSortedEachCalc, [
+									idOfPeopleOwe[currentIdOfPeopleOwe],
+									"amount",
+								]),
+						},
+					};
+					amountSortedEachCalc[idOfPeopleOwed[currentIdOfPeopleOwed]] = {
+						...amountSortedEachCalc[idOfPeopleOwed[currentIdOfPeopleOwed]],
+						amount: Number(
+							(
+								amountSortedEachCalc[idOfPeopleOwed[currentIdOfPeopleOwed]]
+									.amount +
+								amountSortedEachCalc[idOfPeopleOwe[currentIdOfPeopleOwe]].amount
+							).toFixed(2)
+						),
+					};
+					currentIdOfPeopleOwe += 1;
+				} else {
+					paymentsToBeDone[idOfPeopleOwed[currentIdOfPeopleOwed]] = {
+						...getProperty(
+							paymentsToBeDone,
+							[idOfPeopleOwed[currentIdOfPeopleOwed]],
+							{}
+						),
+						name: getProperty(
+							amountSortedEachCalc,
+							[idOfPeopleOwed[currentIdOfPeopleOwed], "name"],
+							""
+						),
+						[idOfPeopleOwe[currentIdOfPeopleOwe]]: {
+							...getProperty(
+								amountSortedEachCalc,
+								[idOfPeopleOwe[currentIdOfPeopleOwe]],
+								{}
+							),
+							amount:
+								getProperty(
+									paymentsToBeDone,
+									[
+										idOfPeopleOwed[currentIdOfPeopleOwed],
+										idOfPeopleOwe[currentIdOfPeopleOwe],
+										"amount",
+									],
+									0
+								) +
+								-1 *
+									getProperty(amountSortedEachCalc, [
+										idOfPeopleOwed[currentIdOfPeopleOwed],
+										"amount",
+									]),
+						},
+					};
+					amountSortedEachCalc[idOfPeopleOwed[currentIdOfPeopleOwed]] = {
+						...amountSortedEachCalc[idOfPeopleOwed[currentIdOfPeopleOwed]],
+						amount: 0,
+					};
+					currentIdOfPeopleOwed += 1;
+				}
+			}
 		});
 		setTotalMoneyOwed(calculations[myUID].amount);
-		if (!returnCalculations) {
-			delete calculations[myUID];
-			setPeopleSplits(Object.values(calculations));
-		} else {
+		if (returnCalculations) {
 			return calculations;
+		}
+		if (calculations[myUID].amount > 0) {
+			setPeopleSplits(
+				Object.values(paymentsToBeDone[myUID]).filter(
+					(item: any) => item.constructor.name !== "String"
+				) as Array<PeopleSplitType>
+			);
+		} else {
+			setPeopleSplits(
+				Object.keys(paymentsToBeDone)
+					.filter((key: any) =>
+						Object.keys(paymentsToBeDone[key]).includes(myUID)
+					)
+					.map((key) => ({
+						name: getProperty(paymentsToBeDone, [key, "name"]),
+						amount:
+							-1 *
+							Number(getProperty(paymentsToBeDone, [key, myUID, "amount"])),
+					}))
+			);
 		}
 	};
 
