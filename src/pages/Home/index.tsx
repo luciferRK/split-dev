@@ -27,17 +27,22 @@ const Home = () => {
 				<div className='splits'>
 					<ShowIfElse if={peopleSplit.loading}>
 						<Section>Loading !!!</Section>
-						<>
-							{peopleSplit.data.map((info) => (
-								<Section key={info.name}>
-									<div>{info.name}</div>
-									<div
-										className={classNames("amount", { less: info.amount > 0 })}>
-										{Math.abs(info.amount)}
-									</div>
-								</Section>
-							))}
-						</>
+						<ShowIfElse if={peopleSplit.data.length > 0}>
+							<>
+								{peopleSplit.data.map((info) => (
+									<Section key={info.name}>
+										<div>{info.name}</div>
+										<div
+											className={classNames("amount", {
+												less: info.amount > 0,
+											})}>
+											{Math.abs(info.amount)}
+										</div>
+									</Section>
+								))}
+							</>
+							<Section>No Splits Found</Section>
+						</ShowIfElse>
 					</ShowIfElse>
 				</div>
 			</div>

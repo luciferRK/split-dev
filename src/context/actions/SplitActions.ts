@@ -198,15 +198,17 @@ const useSplitActions = () => {
 				}
 			}
 		});
-		setTotalMoneyOwed(calculations[myUID].amount);
+		setTotalMoneyOwed(getProperty(calculations, [myUID, "amount"], 0));
 		if (returnCalculations) {
 			return calculations;
 		}
-		if (calculations[myUID].amount > 0) {
+		if (getProperty(calculations, [myUID, "amount"], 0) > 0) {
 			setPeopleSplits(
-				Object.values(paymentsToBeDone[myUID]).filter(
-					(item: any) => item.constructor.name !== "String"
-				) as Array<PeopleSplitType>
+				Object.values(
+					getProperty(paymentsToBeDone, [myUID], {}).filter(
+						(item: any) => item.constructor.name !== "String"
+					) as Array<PeopleSplitType>
+				)
 			);
 		} else {
 			setPeopleSplits(
@@ -227,7 +229,6 @@ const useSplitActions = () => {
 	return {
 		splitState: state,
 		setAllSplits,
-		setPeopleSplits,
 		setTotalMoneyOwed,
 		calculatePeopleSplit,
 	};

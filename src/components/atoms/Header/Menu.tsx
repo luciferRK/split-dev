@@ -2,11 +2,13 @@ import React from "react";
 import classNames from "../../utils";
 import { ShowIfElse } from "../ShowIf";
 import { Link } from "react-router-dom";
+import useFirebase from "../../../services/Firebase";
 
 interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = () => {
 	const [menuOpen, setMenuOpen] = React.useState(false);
+	const { logout } = useFirebase();
 
 	const getHamburger = () => (
 		<div
@@ -34,6 +36,14 @@ const Menu: React.FC<MenuProps> = () => {
 					<Link to='/all-splits'>All Splits</Link>
 					<Link to='/friends'>Friends</Link>
 					<Link to='/groups'>Groups</Link>
+				</div>
+				<div className='logout'>
+					<span
+						onClick={() => {
+							logout();
+						}}>
+						Logout
+					</span>
 				</div>
 			</div>
 			<>{getHamburger()}</>

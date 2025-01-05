@@ -11,6 +11,7 @@ import { FirebaseApp } from "firebase/app";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BasicUserType } from "../context/User/types";
+import toast from "../components/atoms/Toaster";
 
 interface fireStoreFunctionsType {
 	getUser: (email: string, options: any) => void;
@@ -108,10 +109,11 @@ const useFirebaseAuth = (
 	const logout = () => {
 		signOut(auth)
 			.then(() => {
-				// Sign-out successful.
+				toast.success({ msg: "Logged out successfully" });
+				navigate("/login");
 			})
-			.catch(() => {
-				// An error happened.
+			.catch((err) => {
+				toast.error({ msg: "Error occured while logging out", desc: err });
 			});
 	};
 
