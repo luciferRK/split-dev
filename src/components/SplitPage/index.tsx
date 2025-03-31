@@ -3,7 +3,7 @@ import "./SplitPage.scss";
 import Input from "../atoms/Input";
 import Dropdown from "../atoms/Dropdown";
 import ReverseRender from "../atoms/ReverseRender";
-import { Show, ShowIfElse } from "../atoms/ShowIf";
+import { Show } from "../atoms/ShowIf";
 import ContentSection from "./ContentSection";
 import useUserActions from "../../context/actions/UserActions";
 import { getProperty, ifElse, isEmpty, isNullOrUndefined, or } from "../utils";

@@ -1,7 +1,7 @@
 import React from "react";
 import { SplitContext } from "../Split";
 import { PeopleSplitType } from "../Split/types";
-import { getProperty, ifElse, or, sortObject } from "../../components/utils";
+import { getProperty, sortObject } from "../../components/utils";
 
 const useSplitActions = () => {
 	const { state, dispatch } = React.useContext(SplitContext);
