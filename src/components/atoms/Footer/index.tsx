@@ -1,10 +1,10 @@
 import React from "react";
 import "./Footer.scss";
-import classNames from "../../utils";
 import { Back, PlusMinus } from "../Icons";
 import { useNavigate } from "react-router-dom";
 import { ShowIfElse } from "../ShowIf";
 import useSplitActions from "../../../context/actions/SplitActions";
+import { classNames } from "uixtra/utils";
 
 interface FooterProps {
 	isAddNewPage?: boolean;

@@ -6,7 +6,13 @@ import ReverseRender from "../atoms/ReverseRender";
 import { Show } from "../atoms/ShowIf";
 import ContentSection from "./ContentSection";
 import useUserActions from "../../context/actions/UserActions";
-import { getProperty, ifElse, isEmpty, isNullOrUndefined, or } from "../utils";
+import {
+	getProperty,
+	ifElse,
+	isEmpty,
+	isNullOrUndefined,
+	or,
+} from "uixtra/utils";
 import { SplitDataType } from "../utils/constants";
 import useFirebase from "../../services/Firebase";
 import toast from "../atoms/Toaster";

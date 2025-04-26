@@ -1,8 +1,8 @@
 import React from "react";
-import classNames from "../../utils";
 import { ShowIfElse } from "../ShowIf";
 import { Link } from "react-router-dom";
 import useFirebase from "../../../services/Firebase";
+import { classNames } from "uixtra/utils";
 
 interface MenuProps {}
 

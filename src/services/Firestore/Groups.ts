@@ -18,22 +18,18 @@ const getGroupFunctions = (
 	) => DocumentReference<DocumentData, DocumentData>
 ) => {
 	const getMyGroups = (myUID: string) =>
-		getDocs(query(getCol(COLLECTIONS.GROUPS), where("owner", "==", myUID)));
+		getDocs(
+			query(
+				getCol(COLLECTIONS.GROUPS),
+				where("userIDs", "array-contains", myUID)
+			)
+		);
 
 	const deleteGroup = (id: string) =>
 		deleteDoc(getDocField(COLLECTIONS.GROUPS, id));
 
-	const createGroup = (
-		info: {
-			title: string;
-			userIDs: Array<string>;
-		},
-		myUID: string
-	) =>
-		addDoc(getCol(COLLECTIONS.GROUPS), {
-			...info,
-			owner: myUID,
-		});
+	const createGroup = (info: { title: string; userIDs: Array<string> }) =>
+		addDoc(getCol(COLLECTIONS.GROUPS), info);
 
 	return { createGroup, getMyGroups, deleteGroup };
 };

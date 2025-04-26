@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { Show, ShowIfElse } from "../ShowIf";
 import "./Dropdown.scss";
 import { ChevronDown, ChevronUp } from "../Icons";
-import classNames, {
+import Input from "../Input";
+import ReverseRender from "../ReverseRender";
+import { Option } from "../../utils/constants";
+import {
 	and,
+	classNames,
 	ifElse,
 	isEmpty,
 	isNullOrUndefined,
 	or,
-} from "../../utils";
-import Input from "../Input";
-import ReverseRender from "../ReverseRender";
-import { Option } from "../../utils/constants";
+} from "uixtra/utils";
 
 interface DropdownProps {
 	className?: string;

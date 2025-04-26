@@ -1,7 +1,7 @@
 import React from "react";
 import "./Modal.scss";
-import classNames from "../../utils";
 import { Show } from "../ShowIf";
+import { classNames } from "uixtra/utils";
 
 interface ModalProps extends React.PropsWithChildren {
 	className?: string;

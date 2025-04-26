@@ -1,6 +1,5 @@
 import React from "react";
 import { Show } from "../atoms/ShowIf";
-import classNames, { ifElse, or } from "../utils";
 import Input from "../atoms/Input";
 import Dropdown from "../atoms/Dropdown";
 import { Option } from "../utils/constants";
@@ -9,6 +8,7 @@ import useUserActions from "../../context/actions/UserActions";
 import Section from "../atoms/Section";
 import toast from "../atoms/Toaster";
 import useFirebase from "../../services/Firebase";
+import { classNames, ifElse, or } from "uixtra/utils";
 
 interface ContentSectionProps {
 	className?: string;

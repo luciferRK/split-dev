@@ -1,7 +1,8 @@
 import React from "react";
 import { SplitContext } from "../Split";
 import { PeopleSplitType } from "../Split/types";
-import { getProperty, sortObject } from "../../components/utils";
+import { sortObject } from "../../components/utils";
+import { getProperty } from "uixtra/utils";
 
 const useSplitActions = () => {
 	const { state, dispatch } = React.useContext(SplitContext);
@@ -204,11 +205,9 @@ const useSplitActions = () => {
 		}
 		if (getProperty(calculations, [myUID, "amount"], 0) > 0) {
 			setPeopleSplits(
-				Object.values(
-					getProperty(paymentsToBeDone, [myUID], {}).filter(
-						(item: any) => item.constructor.name !== "String"
-					) as Array<PeopleSplitType>
-				)
+				Object.values(getProperty(paymentsToBeDone, [myUID], {})).filter(
+					(item: any) => item.constructor.name !== "String"
+				) as Array<PeopleSplitType>
 			);
 		} else {
 			setPeopleSplits(

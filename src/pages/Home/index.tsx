@@ -2,11 +2,11 @@ import React from "react";
 import Footer from "../../components/atoms/Footer";
 import Header from "../../components/atoms/Header";
 import Section from "../../components/atoms/Section";
-import classNames from "../../components/utils";
 import useFirebase from "../../services/Firebase";
 import "./Home.scss";
 import useSplitActions from "../../context/actions/SplitActions";
 import { ShowIfElse } from "../../components/atoms/ShowIf";
+import { classNames } from "uixtra/utils";
 
 const Home = () => {
 	const { getAllSplits } = useFirebase();

@@ -8,8 +8,8 @@ import Input from "../../components/atoms/Input";
 import Dropdown from "../../components/atoms/Dropdown";
 import useUserActions from "../../context/actions/UserActions";
 import toast from "../../components/atoms/Toaster";
-import { isEmpty } from "../../components/utils";
 import Section from "../../components/atoms/Section";
+import { isEmpty } from "uixtra/utils";
 
 interface GroupsProps {}
 
@@ -40,19 +40,22 @@ const Groups: React.FC<GroupsProps> = () => {
 			toast.error({ msg: "Please fill in all fields" });
 			return;
 		}
-		addGroup(newGroupInfo, (err: any) => {
-			if (err) {
-				toast.error({ msg: "Failed to create group", desc: err });
-			} else {
-				toast.success({ msg: "Group created successfully" });
-				setAddGroupModal(false);
-				setNewGroupInfo({
-					title: "",
-					users: [""],
-				});
-				getMyGroups(true);
+		addGroup(
+			{ ...newGroupInfo, users: [...newGroupInfo.users, userState.user.email] },
+			(err: any) => {
+				if (err) {
+					toast.error({ msg: "Failed to create group", desc: err });
+				} else {
+					toast.success({ msg: "Group created successfully" });
+					setAddGroupModal(false);
+					setNewGroupInfo({
+						title: "",
+						users: [""],
+					});
+					getMyGroups(true);
+				}
 			}
-		});
+		);
 	};
 
 	return (

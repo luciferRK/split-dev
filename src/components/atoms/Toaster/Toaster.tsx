@@ -1,8 +1,8 @@
 import React from "react";
 import "./Toaster.scss";
 import { ToasterProps } from "./types";
-import classNames, { and } from "../../utils";
 import { X } from "../Icons";
+import { and, classNames } from "uixtra/utils";
 
 const Toaster: React.FC<ToasterProps> = (props) => {
 	const {

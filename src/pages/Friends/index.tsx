@@ -7,10 +7,10 @@ import Dropdown from "../../components/atoms/Dropdown";
 import { Show, ShowIfElse } from "../../components/atoms/ShowIf";
 import useFirebase from "../../services/Firebase";
 import useUserActions from "../../context/actions/UserActions";
-import { ifElse, isEmpty } from "../../components/utils";
 import toast from "../../components/atoms/Toaster";
 import Section from "../../components/atoms/Section";
 import { Option } from "../../components/utils/constants";
+import { ifElse, isEmpty } from "uixtra/utils";
 
 interface FriendsProps {}
 

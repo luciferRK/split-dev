@@ -1,7 +1,7 @@
 import React from "react";
 import useUserActions from "../../context/actions/UserActions";
-import { ifElse } from "../utils";
 import { Navigate } from "react-router-dom";
+import { ifElse } from "uixtra/utils";
 
 interface AuthGuardProps {
 	component: React.ReactNode;

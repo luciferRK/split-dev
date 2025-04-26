@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../User";
-import { ifElse } from "../../components/utils";
 import { UserTypeInContext } from "../User/types";
+import { ifElse } from "uixtra/utils";
 
 const useUserActions = () => {
 	const { state: userState, dispatch } = useContext(UserContext);

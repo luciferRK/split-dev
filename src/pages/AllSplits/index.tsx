@@ -3,11 +3,11 @@ import "../Home/Home.scss";
 import Header from "../../components/atoms/Header";
 import Footer from "../../components/atoms/Footer";
 import Section from "../../components/atoms/Section";
-import classNames from "../../components/utils";
 import useSplitActions from "../../context/actions/SplitActions";
 import useFirebase from "../../services/Firebase";
 import { useNavigate } from "react-router-dom";
 import { ShowIfElse } from "../../components/atoms/ShowIf";
+import { classNames } from "uixtra/utils";
 
 interface AllSplitsProps {}
 

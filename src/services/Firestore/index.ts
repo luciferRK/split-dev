@@ -6,12 +6,13 @@ import {
 	getFirestore,
 	QuerySnapshot,
 } from "firebase/firestore";
-import { handleError, or } from "../../components/utils";
+import { handleError } from "../../components/utils";
 import getUserFunctions from "./Users";
 import useUserActions from "../../context/actions/UserActions";
 import { BasicUserType } from "../../context/User/types";
 import getFriendsFunction from "./Friends";
 import getGroupFunctions from "./Groups";
+import { or } from "uixtra/utils";
 
 export const COLLECTIONS = {
 	USERS: "users",
@@ -150,13 +151,10 @@ const useFirestore = (app: FirebaseApp) => {
 		info: { title: string; users: Array<string> },
 		onComplete: Function = (_: any) => {}
 	) => {
-		createGroup(
-			{
-				title: info.title,
-				userIDs: info.users,
-			},
-			userState.user.uid
-		)
+		createGroup({
+			title: info.title,
+			userIDs: info.users,
+		})
 			.then(() => {
 				onComplete();
 			})
